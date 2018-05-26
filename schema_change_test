@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 echo "renaming column in remittance table"
 echo "-----"
