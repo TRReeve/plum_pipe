@@ -10,6 +10,7 @@ this job would be split into its seperate components with ETL loads happening fa
 till the last possible moment to maximise availability
 
 
+Assumes a unix system
 --Folder Structure
 
 --Data
@@ -36,4 +37,6 @@ till the last possible moment to maximise availability
 
 ./run_schema_tesh
 
+--TO GET BACK THE REPORTS CONTAINING ALL ANSWERS TO QUESTIONS
 
+./get_reports
