@@ -47,7 +47,7 @@ def infer_table_schema(schema,table):
 def get_primary_key(schema,table):
 
     """
-    returns a list of column names in the target load table
+    get name of primary key for relevant load table
     """
     conn = get_connection()
     cur = conn.cursor()
@@ -61,7 +61,7 @@ def get_primary_key(schema,table):
     query_return = cur.fetchall()
     conn.close()
 
-    # convert returned tuples to list
+    # return result
     primary_key = query_return[0][0]
 
     return primary_key
@@ -85,8 +85,8 @@ def infer_csv_columns(target_csv):
 
 def process_csv(data_source,schema,target,table_columns):
     """
-    generator for inserting data from csv file, async is
-    slightly overkill but could be another approach
+    generator for inserting data from potentially memory overloading 
+    csv file, async is slightly overkill but could be another approach
     """
 
     #how many lines to be held in memory at a time maximum, trade off
