@@ -89,7 +89,9 @@ def process_csv(data_source,schema,target,table_columns):
     slightly overkill but could be another approach
     """
 
-    #how many lines to be held in memory at a time maximum
+    #how many lines to be held in memory at a time maximum, trade off
+    #between overall throughput, RAM useage and write speed on postgres
+    #returns started to diminish > 20k rows so backed off to 10k
     max_chunk_size = 10000
 
     #insertion counter
