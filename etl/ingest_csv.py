@@ -3,10 +3,14 @@ import argparse
 import csv
 import psycopg2
 from psycopg2 import sql
+import time
+import getpass
 
+start_time = time.clock()
 CURRENT_DIR = os.getcwd()
-dbname = 'plum_pipe'
-username = 'tom'
+DATA_DIR = os.path.join(CURRENT_DIR,"data")
+dbname = "plum_pipe"
+username = getpass.getuser()
 
 def get_connection():
 
@@ -14,6 +18,7 @@ def get_connection():
     get db connection
     """
     conn = psycopg2.connect(dbname=dbname,user=username)
+
 
     return conn
 
@@ -40,6 +45,30 @@ def infer_table_schema(schema,table):
 
     return table_schema
 
+def get_primary_key(schema,table):
+
+    """
+    returns a list of column names in the target load table
+    """
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(sql.SQL("""Select constraint_name from information_schema.table_constraints 
+    where table_schema = {0}
+    and table_name = {1}
+    and constraint_type = 'PRIMARY KEY'""")
+                .format(sql.Literal(schema),
+                        sql.Literal(table)))
+    query_return = cur.fetchall()
+    conn.close()
+
+    # convert returned tuples to list
+    primary_key = query_return[0][0]
+
+    return primary_key
+
+
+
 
 def infer_csv_columns(target_csv):
 
@@ -64,7 +93,14 @@ def process_csv(data_source,schema,target,table_columns):
     """
 
     #how many lines we'll hold in memory
-    max_chunk_size = 1000
+
+    if target_table == 'countries':
+        max_chunk_size = 1
+    else:
+        max_chunk_size = 100
+
+    #insertion counter
+    inserted = 0
 
     with open(data_source,'r') as f:
 
@@ -78,27 +114,39 @@ def process_csv(data_source,schema,target,table_columns):
             chunkholder.append((tuple(line.split(","))))
 
             """waits for list to reach a certain size before 
-            inserting and clearing list, avoids RAM overflows"""
+            inserting and clearing list, avoids RAM overflows and large inserts"""
 
-            if len(chunkholder) > max_chunk_size:
+            if len(chunkholder) == max_chunk_size:
 
-                insert_to_table(chunkholder,schema,target,table_columns)
+                result = insert_to_table(chunkholder, schema, target, table_columns)
+                inserted = inserted + int(result)
                 # empties list object while keeping variable allocated
                 chunkholder.clear()
 
+
+        return inserted
+
+
 def insert_to_table(data_object,schema,table,table_columns):
+
+    """inserts batch tuples and data to corresponding load layer table"""
 
     conn = get_connection()
     cur = conn.cursor()
+    primary_key = get_primary_key(schema, table)
 
 
-    cur.execute(sql.SQL("INSERT INTO {}.{} ({}) VALUES {} ").format(sql.Identifier(schema),
+    cur.execute(sql.SQL("INSERT INTO {0}.{1} ({2}) VALUES {3} "
+                        "ON CONFLICT ON CONSTRAINT {4} DO NOTHING").format(sql.Identifier(schema),
                                                                 sql.Identifier(table),
                                                                 sql.SQL(', ').join(map(sql.Identifier, table_columns)),
-                                                                sql.SQL(',').join(map(sql.Literal, data_object))))
-
+                                                                sql.SQL(',').join(map(sql.Literal, data_object)),
+                                                                           sql.Identifier(primary_key)))
+    result = tuple(cur.statusmessage.split(" "))
     conn.commit()
     conn.close()
+
+    return result[2]
 
 
 
@@ -108,20 +156,27 @@ if __name__ == '__main__':
     # create parser object
     parser = argparse.ArgumentParser()
     parser.add_argument('--source',help='comma seperated data source')
+    parser.add_argument('--target_schema',default="load", help='target schema')
     parser.add_argument('--target_table', help='target table')
     args = parser.parse_args()
     csv_file = os.path.join(CURRENT_DIR, args.source)
 
     # assuming all loads go to this schema
-    load_schema = "load"
+    target_schema = args.target_schema
     target_table = args.target_table
 
     csv_columns = infer_csv_columns(csv_file)
-    table_columns = infer_table_schema(load_schema,target_table)
+    table_columns = infer_table_schema(target_schema,target_table)
 
     if sorted(csv_columns) == sorted(table_columns):
-        print("schemas match")
-        process_csv(csv_file,load_schema,target_table,table_columns)
+        insert_count = process_csv(csv_file,target_schema,target_table,table_columns)
+        print("\n ---{0} records inserted to {1}.{2} in {3} seconds---\n".format(insert_count, target_schema, target_table,
+                                                                      time.clock() - start_time))
 
     else:
-        print("schema of target table and insert csv are not matching, create or alter columns as necessary")
+        print("USER ERROR \n schema of target table and insert csv are not matching, create or alter columns as necessary")
+        print("csv schema = {0}".format(csv_columns))
+        print("table_schema = {0}".format(table_columns))
+
+
+

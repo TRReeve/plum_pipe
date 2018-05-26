@@ -1,0 +1,30 @@
+#!/bin/bash
+
+##CREATE TARGET DATABASE AND MODELS FOR ETL PROCESS
+
+##Script Assumes the existence of a postgres cluster accessible to the user
+
+DB="plum_pipe"
+
+#drop and create test db
+
+#If you get an error here run $service postgressql restart which will clear out 
+#existing sessions
+
+dropdb $DB
+
+echo "creating database $DB for owner $USER"
+createdb $DB
+echo $DB
+
+echo "creating load_layer in $DB"
+
+psql -d $DB < sql/create_load_tables.sql
+
+echo "creating batch_layer in $DB"
+
+psql -d $DB < sql/create_batch_layer.sql
+
+echo "generating report views"
+
+psql -d $DB < sql/create_report_views.sql

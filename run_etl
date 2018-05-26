@@ -1,0 +1,35 @@
+#!/bin/bash
+
+echo "running the monolith version of the ETL pipeline..."
+
+DB="plum_pipe"
+
+cd etl
+echo "creating country primary key and json file and csv..."
+
+pipenv run python3 create_country_json.py --source bilateralmigrationmatrix20130.csv
+
+echo "mapping matrix files to create normalised csvs..."
+
+pipenv run python3 matrix_to_relational.py --source bilateralmigrationmatrix20130.csv --target_csv migration.csv
+
+pipenv run python3 matrix_to_relational.py --source bilateralremittancematrix2016_Nov2017.csv --target_csv remittance.csv
+
+echo "inserting csvs to table...."
+
+pipenv run python3 ingest_csv.py --source data/migration.csv --target_schema load --target_table migration
+
+pipenv run python3 ingest_csv.py --source data/remittance.csv --target_schema load --target_table remittance
+
+pipenv run python3 ingest_csv.py --source data/countries.csv --target_schema load --target_table countries
+
+
+echo "---RECALCULATING BATCH LAYER---"
+
+cd ..
+
+psql -d $DB < sql/create_batch_layer.sql
+
+echo "---RECALCULATING VIEWS---"
+
+psql -d $DB < sql/create_report_views.sql

@@ -1,0 +1,26 @@
+ETL PROCESS
+
+CREATE COUNTRY JSON AND DIMENSION CSV FILE:
+
+take either of the raw data files and map to an id. This is then used to ensure data integrity
+when the other two jobs run (theoretically someone could change the columns round tommorow for funsies)
+
+$ pipenv run python3 create_country_json.py --source data/bilateralmigrationmatrix20130.csv
+
+
+CREATE NEW CSVS FROM matrix files:
+
+run job and specify what the name of the csv to output will be
+
+$ pipenv run python3 matrix_to_relational.py --source data/bilateralmigrationmatrix20130.csv --target_csv migration.csv
+
+
+INSERT CSVs TO DATABASE:
+
+point job at a formatted csv and a corresponding table to insert to. The Job will check the schemas of the CSV and the Table
+match before inserting. Will return how many records were inserted where and in what time.
+
+NOTE: The load table has a primary key on it to avoid corruption, if you try and insert the same record twice it will
+not insert the record. If you want to reinsert again Truncate the table.
+
+§ pipenv run python3 ingest_csv.py --source data/migration.csv --target_schema load --target_table migration
