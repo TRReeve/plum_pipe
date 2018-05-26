@@ -37,7 +37,7 @@ def parse_to_integer(object):
     try:
         object = int(remove_commas)
     except:
-        print("\n WARNING " + remove_commas + " not a valid integer, value changed to 0 for the moment, check data")
+        print("Warning " + remove_commas + " not a valid integer, value coalesced to 0, check data recommended")
         object = 0
     return object
 
@@ -92,4 +92,4 @@ if __name__ == '__main__':
     column_heads = get_column_heads(json_map,source_file)
     mapped_data = get_rows_info(json_map,column_heads,source_file)
     write_to_csv(mapped_data,csv_file)
-    print("matrix mapped to csv located at {0}".format(csv_file))
+    print("\n ---matrix mapped to csv located at {0}---\n".format(csv_file))

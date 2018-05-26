@@ -92,12 +92,8 @@ def process_csv(data_source,schema,target,table_columns):
     slightly overkill but could be another approach
     """
 
-    #how many lines we'll hold in memory
-
-    if target_table == 'countries':
-        max_chunk_size = 1
-    else:
-        max_chunk_size = 10000
+    #how many lines to be held in memory at a time maximum
+    max_chunk_size = 10000
 
     #insertion counter
     inserted = 0
@@ -124,7 +120,7 @@ def process_csv(data_source,schema,target,table_columns):
                 # empties list object while keeping variable allocated
                 chunkholder.clear()
 
-        #insert remainder of chunkholder
+        #insert remainder of chunkholder in reaching end of csv if it hasnt met max size
         if len(chunkholder) > 0:
             result = insert_to_table(chunkholder, schema, target, table_columns)
             inserted = inserted + int(result)
