@@ -97,14 +97,15 @@ def process_csv(data_source,schema,target,table_columns):
     if target_table == 'countries':
         max_chunk_size = 1
     else:
-        max_chunk_size = 100
+        max_chunk_size = 10000
 
     #insertion counter
     inserted = 0
 
     with open(data_source,'r') as f:
 
-        next(f)
+        csvline = next(f)
+        
 
         chunkholder = []
 
@@ -122,6 +123,12 @@ def process_csv(data_source,schema,target,table_columns):
                 inserted = inserted + int(result)
                 # empties list object while keeping variable allocated
                 chunkholder.clear()
+
+        #insert remainder of chunkholder
+        if len(chunkholder) > 0:
+            result = insert_to_table(chunkholder, schema, target, table_columns)
+            inserted = inserted + int(result)
+            chunkholder.clear()
 
 
         return inserted

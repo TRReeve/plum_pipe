@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS dwh.v_top10_migration_destinations;
-CREATE VIEW dwh.v_top10_migration_destinations AS (
+DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_migration_destinations;
+CREATE MATERIALIZED VIEW dwh.v_top10_migration_destinations AS (
 
 Select
 name,
@@ -12,8 +12,8 @@ Group By 1
 Order by 2 desc
 limit 10);
 
-DROP VIEW IF EXISTS dwh.v_top10_migration_origins;
-CREATE VIEW dwh.v_top10_migration_origins AS (
+DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_migration_origins;
+CREATE MATERIALIZED VIEW dwh.v_top10_migration_origins AS (
 
 Select
 name,
@@ -26,8 +26,8 @@ Group By 1
 Order by 2 asc
 limit 10);
 
-DROP VIEW IF EXISTS dwh.v_top10_country_to_country_migration;
-CREATE VIEW dwh.v_top10_country_to_country_migration as (
+DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_country_to_country_migration;
+CREATE MATERIALIZED VIEW dwh.v_top10_country_to_country_migration as (
 
 Select
 sid.name as source_country,
@@ -43,8 +43,8 @@ AND sid.id NOT IN (217,216,217)
 Order By 3 desc
 Limit 10);
 
-DROP VIEW IF EXISTS dwh.v_top10_country_to_country_remittances;
-CREATE VIEW dwh.v_top10_country_to_country_remittances as (
+DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_country_to_country_remittances;
+CREATE MATERIALIZED VIEW dwh.v_top10_country_to_country_remittances as (
 
 Select
 sid.name as source_country,
@@ -60,8 +60,8 @@ AND sid.id NOT IN (217,216,217)
 Order By 3 desc
 Limit 10);
 
-DROP VIEW IF EXISTS dwh.v_top10_net_inflows;
-CREATE VIEW dwh.v_top10_net_inflows as (
+DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_net_inflows;
+CREATE MATERIALIZED VIEW dwh.v_top10_net_inflows as (
 
 Select
 id,
@@ -72,8 +72,8 @@ FROM dwh.net_movements
 order by 3 desc
 limit 10);
 
-DROP VIEW IF EXISTS dwh.v_top10_net_outflows;
-CREATE VIEW dwh.v_top10_net_outflows as (
+DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_net_outflows;
+CREATE MATERIALIZED VIEW dwh.v_top10_net_outflows as (
 
 Select
 id,
