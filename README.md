@@ -13,14 +13,13 @@ till the last possible moment to maximise availability
 Assumes a unix system
 --Folder Structure
 
---Data
-    - Contains the data sources and CSVs
 
 --ETL
+    -Data
+    - Contains the data sources and CSVs
 
     - matrix_to_relational.py: Parses the matrix stored data in a CSV into a relational form.
     - ingest_csv.py takes a csv file under the argument --source and inserts to a table --target_table
-
 --SQL 
     -Contains SQLs for creating the dwh model
 
