@@ -1,5 +1,7 @@
 #!/bin/bash
 
+##simplistic data pipeline. Could be parallelised and mapped properly in airflow with more time
+
 echo "running the monolith version of the ETL pipeline..."
 
 DB="plum_pipe"
