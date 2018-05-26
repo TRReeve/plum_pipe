@@ -168,7 +168,7 @@ if __name__ == '__main__':
 
     if sorted(csv_columns) == sorted(table_columns):
         insert_count = process_csv(csv_file,target_schema,target_table,table_columns)
-        print("\n ---{0} records inserted to {1}.{2} in {3} seconds---\n".format(insert_count, target_schema, target_table,
+        print("\n ---{0} records inserted from {1} to {2}.{3} in {4} seconds---\n".format(insert_count, args.source,target_schema, target_table,
                                                                       time.clock() - start_time))
 
     else:
