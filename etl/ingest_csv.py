@@ -157,18 +157,14 @@ if __name__ == '__main__':
     parser.add_argument('--target_schema',default="load", help='target schema')
     parser.add_argument('--target_table', help='target table')
     args = parser.parse_args()
+
     csv_file = os.path.join(CURRENT_DIR, args.source)
-
-    # assuming all loads go to this schema
-    target_schema = args.target_schema
-    target_table = args.target_table
-
     csv_columns = infer_csv_columns(csv_file)
-    table_columns = infer_table_schema(target_schema,target_table)
+    table_columns = infer_table_schema(args.target_schema,args.target_table)
 
     if sorted(csv_columns) == sorted(table_columns):
-        insert_count = process_csv(csv_file,target_schema,target_table,table_columns)
-        print("\n ---{0} records inserted from {1} to {2}.{3} in {4} seconds---\n".format(insert_count, args.source,target_schema, target_table,
+        insert_count = process_csv(csv_file,args.target_schema,args.target_table,table_columns)
+        print("\n ---{0} records inserted from {1} to {2}.{3} in {4} seconds---\n".format(insert_count, args.source,args.target_schema, args.target_table,
                                                                       time.clock() - start_time))
 
     else:
