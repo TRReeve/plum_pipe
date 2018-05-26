@@ -1,0 +1,22 @@
+
+echo "top10 country_to_country_migration"
+psql -d plum_pipe -c "Select * FROM dwh.v_top10_country_to_country_migration"
+
+
+echo "top 10 country to country remittances"
+psql -d plum_pipe -c "Select * FROM dwh.v_top10_country_to_country_remittances"
+
+
+echo "top10_migration_destinations"
+psql -d plum_pipe -c "Select * FROM dwh.v_top10_migration_destinations"
+
+echo "top10 migration origins"
+psql -d plum_pipe -c "Select * FROM dwh.v_top10_migration_origins"
+
+echo "top10 net outflows"
+psql -d plum_pipe -c "Select * FROM dwh.v_top10_net_outflows"
+
+echo "top10 net inflows"
+psql -d plum_pipe -c "Select * FROM dwh.v_top10_net_inflows"
+
+
