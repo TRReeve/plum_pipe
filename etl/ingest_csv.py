@@ -19,7 +19,6 @@ def get_connection():
     """
     conn = psycopg2.connect(dbname=dbname,user=username)
 
-
     return conn
 
 
@@ -66,8 +65,6 @@ def get_primary_key(schema,table):
     primary_key = query_return[0][0]
 
     return primary_key
-
-
 
 
 def infer_csv_columns(target_csv):
@@ -150,8 +147,6 @@ def insert_to_table(data_object,schema,table,table_columns):
     conn.close()
 
     return result[2]
-
-
 
 
 if __name__ == '__main__':
