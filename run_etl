@@ -4,6 +4,8 @@
 
 echo "running the monolith version of the ETL pipeline..."
 
+TIME=$(date +%Y%m%d'_')
+
 DB="plum_pipe"
 
 cd etl
@@ -13,15 +15,15 @@ pipenv run python3 create_country_json.py --source bilateralmigrationmatrix20130
 
 echo "mapping matrix files to create normalised csvs..."
 
-pipenv run python3 matrix_to_relational.py --source bilateralmigrationmatrix20130.csv --target_csv migration.csv
+pipenv run python3 matrix_to_relational.py --source bilateralmigrationmatrix20130.csv --target_csv $TIME'migration.csv'
 
-pipenv run python3 matrix_to_relational.py --source bilateralremittancematrix2016_Nov2017.csv --target_csv remittance.csv
+pipenv run python3 matrix_to_relational.py --source bilateralremittancematrix2016_Nov2017.csv --target_csv $TIME'remittance.csv'
 
 echo "inserting csvs to table...."
 
-pipenv run python3 ingest_csv.py --source data/migration.csv --target_schema load --target_table migration
+pipenv run python3 ingest_csv.py --source data/$TIME'migration.csv' --target_schema load --target_table migration
 
-pipenv run python3 ingest_csv.py --source data/remittance.csv --target_schema load --target_table remittance
+pipenv run python3 ingest_csv.py --source data/$TIME'remittance.csv' --target_schema load --target_table remittance
 
 pipenv run python3 ingest_csv.py --source data/countries.csv --target_schema load --target_table countries
 
@@ -36,6 +38,5 @@ echo "---REFRESHING MATERIALIZED VIEWS---"
 
 psql -d $DB < sql/refresh_mviews.sql
 
-echo "--RUNNING REPORTS--"
 
-./get_reports
+echo "run ./get_reports to get reports"
