@@ -66,22 +66,20 @@ DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_net_inflows;
 CREATE MATERIALIZED VIEW dwh.v_top10_net_inflows as (
 
 Select
-id,
 name,
 inflows - outflows as net_flow
 
 FROM dwh.net_movements
-order by 3 desc
+order by 2 desc
 limit 10);
 
 DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_net_outflows;
 CREATE MATERIALIZED VIEW dwh.v_top10_net_outflows as (
 
 Select
-id,
 name,
 inflows -outflows as net_flow
 
 FROM dwh.net_movements
-order by 3 asc
+order by 2 asc
 limit 10)

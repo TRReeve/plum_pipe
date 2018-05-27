@@ -39,4 +39,4 @@ echo "---REFRESHING MATERIALIZED VIEWS---"
 psql -d $DB < sql/refresh_mviews.sql
 
 
-echo "run ./get_reports to get reports"
+echo "run ./get_reports to get reports or pipe into a file with ./get_reports > reports.txt"
