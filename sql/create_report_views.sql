@@ -51,7 +51,7 @@ CREATE MATERIALIZED VIEW dwh.v_top10_country_to_country_remittances as (
 Select
 sid.name as source_country,
 rid.name as receiving_country,
-remittance_value as remittance_value
+remittance_value as remittances_millions
 from dwh.remittance_value fact
 JOIN dwh.source_countries sid ON fact.source_id = sid.id
 JOIN dwh.receiver_countries rid ON fact.receiver_id = rid.id

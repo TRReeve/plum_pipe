@@ -2,22 +2,25 @@
 
 ##simplistic data pipeline. Could be parallelised and mapped properly in airflow with more time
 
-echo "running the monolith version of the ETL pipeline..."
+echo "running the ETL pipeline..."
 
 TIME=$(date +%Y%m%d'_')
 
 DB="plum_pipe"
 
 cd etl
-echo "creating country primary key and json file and csv..."
+echo "creating country primary key..."
 
 pipenv run python3 create_country_json.py --source bilateralmigrationmatrix20130.csv
 
+echo "JSON created..."
+
+
 echo "mapping matrix files to create normalised csvs..."
 
-pipenv run python3 matrix_to_relational.py --source bilateralmigrationmatrix20130.csv --target_csv $TIME'migration.csv'
+pipenv run python3 matrix_to_relational.py --source bilateralmigrationmatrix20130.csv --target_csv $TIME'migration.csv' --x_axis_name 'source_id' --y_axis_name 'receiver_id'
 
-pipenv run python3 matrix_to_relational.py --source bilateralremittancematrix2016_Nov2017.csv --target_csv $TIME'remittance.csv'
+pipenv run python3 matrix_to_relational.py --source bilateralremittancematrix2016_Nov2017.csv --target_csv $TIME'remittance.csv' --x_axis_name 'source_id' --y_axis_name 'receiver_id'
 
 echo "inserting csvs to table...."
 
