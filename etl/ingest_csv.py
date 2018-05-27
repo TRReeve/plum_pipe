@@ -136,8 +136,8 @@ def insert_to_table(data_object,schema,table,table_columns):
     primary_key = get_primary_key(schema, table)
 
 
-    cur.execute(sql.SQL("INSERT INTO {0}.{1} ({2}) VALUES {3} "
-                        "ON CONFLICT ON CONSTRAINT {4} DO NOTHING")
+    cur.execute(sql.SQL("""INSERT INTO {0}.{1} ({2}) VALUES {3}
+                        ON CONFLICT ON CONSTRAINT {4} DO NOTHING""")
                                                         .format(sql.Identifier(schema),
                                                                 sql.Identifier(table),
                                                                 sql.SQL(', ').join(map(sql.Identifier, table_columns)),
