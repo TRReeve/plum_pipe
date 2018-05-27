@@ -30,7 +30,7 @@ def dump_json_file(data,outfile):
 
     """"....dumps a json file?..."""
 
-    with open(outfile + '.json','w') as write:
+    with open(os.path.join(DATA_DIR,outfile + '.json'),'w') as write:
         json.dump(data,write)
 
 def json_to_csv_dump(json_data,outfile,columns):

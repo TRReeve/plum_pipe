@@ -11,7 +11,7 @@ def get_country_ids():
 
     """returns dictionary that maps country id to name"""
 
-    with open("countries.json", 'r') as r:
+    with open(os.path.join(DATA_DIR,"countries.json"), 'r') as r:
         jobj = json.load(r)
         return jobj
 
