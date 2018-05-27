@@ -50,23 +50,24 @@ FROM (
 Select
 sid.id,
 name,
-sum(migration_numbers) as outflows
+sum(CASE WHEN receiver_id NOT IN (217) THEN migration_numbers END) as outflows
 
 from dwh.migration fact
 JOIN dwh.source_countries sid ON fact.source_id = sid.id
-WHERE sid.id NOT IN (217,216,217)
+WHERE sid.id NOT IN (217)
 Group By 1,2
 Order by 3 desc)sub1
 
 JOIN (Select
 rid.id,
 name,
-sum(migration_numbers) as inflows
+sum(CASE WHEN source_id NOT IN (217) THEN migration_numbers END) as inflows
 
 from dwh.migration fact
 JOIN dwh.receiver_countries rid ON fact.receiver_id = rid.id
-WHERE rid.id NOT IN (217,216,217)
+WHERE rid.id NOT IN (217)
 Group By 1,2)sub2 ON sub1.id = sub2.id);
+
 
 CREATE INDEX ON dwh.migration (source_id);
 CREATE INDEX ON dwh.migration (receiver_id);
