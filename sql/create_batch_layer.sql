@@ -1,18 +1,10 @@
 DROP SCHEMA IF EXISTS dwh CASCADE;
 CREATE SCHEMA dwh;
-DROP TABLE IF EXISTS dwh.source_countries;
-CREATE TABLE dwh.source_countries as (
+DROP TABLE IF EXISTS dwh.countries;
+CREATE TABLE dwh.countries as (
 Select
 
 id,name
-FROM load.countries c
-
-Group By 1,2
-Order By 1,2);
-
-DROP TABLE IF EXISTS dwh.receiver_countries;
-CREATE TABLE dwh.receiver_countries as (
-Select id,name
 FROM load.countries c
 
 Group By 1,2
@@ -53,7 +45,7 @@ name,
 sum(CASE WHEN receiver_id NOT IN (217) THEN migration_numbers END) as outflows
 
 from dwh.migration fact
-JOIN dwh.source_countries sid ON fact.source_id = sid.id
+JOIN dwh.countries sid ON fact.source_id = sid.id
 WHERE sid.id NOT IN (217)
 Group By 1,2
 Order by 3 desc)sub1
@@ -64,7 +56,7 @@ name,
 sum(CASE WHEN source_id NOT IN (217) THEN migration_numbers END) as inflows
 
 from dwh.migration fact
-JOIN dwh.receiver_countries rid ON fact.receiver_id = rid.id
+JOIN dwh.countries rid ON fact.receiver_id = rid.id
 WHERE rid.id NOT IN (217)
 Group By 1,2)sub2 ON sub1.id = sub2.id);
 

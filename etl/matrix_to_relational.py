@@ -42,12 +42,17 @@ def parse_to_integer(object):
         object = 0
     return object
 
-def get_rows_info(country_id_map,column_heads,target_csv):
+def get_rows_info(country_id_map,column_heads,target_csv,x_axis,y_axis):
+    
+    """creates start row of y axis, x axis and amount,
+       for each row in the document inserts the id of the x axis (from standard 
+       country id json and the amount found at the vector of x & y into a columnar
+       form that we can work with"""
 
     with open(target_csv, 'r') as f:
 
         next(f)
-        rows_object = [['source_id', 'receiver_id', 'amount']]
+        rows_object = [[x_axis,y_axis, 'amount']]
 
         # get y axis dimensions
 
@@ -85,12 +90,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--source',help='comma seperated data source')
     parser.add_argument('--target_csv', help='target table')
+    parser.add_argument('--x_axis_name', help='x axis name of matrix')
+    parser.add_argument('--y_axis_name', help='y axis name of matrix')
     args = parser.parse_args()
     source_file = os.path.join(DATA_DIR, args.source)
     csv_file = os.path.join(DATA_DIR,args.target_csv)
 
     json_map = get_country_ids()
     column_heads = get_column_heads(json_map,source_file)
-    mapped_data = get_rows_info(json_map,column_heads,source_file)
+    mapped_data = get_rows_info(json_map,column_heads,source_file,args.x_axis_name,args.y_axis_name)
     write_to_csv(mapped_data,csv_file)
     print("\n ---matrix mapped to csv located at {0}---\n".format(csv_file))

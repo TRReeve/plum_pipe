@@ -6,7 +6,7 @@ name,
 sum(case when source_id = 217 THEN migration_numbers END) as immigrants
 
 from dwh.migration fact
-JOIN dwh.receiver_countries rid ON fact.receiver_id = rid.id
+JOIN dwh.countries rid ON fact.receiver_id = rid.id
 WHERE rid.id NOT IN (217)
 Group By 1
 Order by 2 desc
@@ -19,7 +19,7 @@ Select
 name,
 sum(CASE WHEN receiver_id = 217 THEN migration_numbers END) as total_emigrants
 from dwh.migration fact
-JOIN dwh.source_countries sid ON fact.source_id = sid.id
+JOIN dwh.countries sid ON fact.source_id = sid.id
 WHERE sid.id NOT IN (217)
 Group By 1
 Order by 2 desc
@@ -36,8 +36,8 @@ sid.name as source_country,
 rid.name as receiving_country,
 migration_numbers as migration_flows
 from dwh.migration fact
-JOIN dwh.source_countries sid ON fact.source_id = sid.id
-JOIN dwh.receiver_countries rid ON fact.receiver_id = rid.id
+JOIN dwh.countries sid ON fact.source_id = sid.id
+JOIN dwh.countries rid ON fact.receiver_id = rid.id
 
 WHERE rid.id NOT IN (217)
 AND sid.id NOT IN (217)
@@ -53,8 +53,8 @@ sid.name as source_country,
 rid.name as receiving_country,
 remittance_value as remittances_millions
 from dwh.remittance_value fact
-JOIN dwh.source_countries sid ON fact.source_id = sid.id
-JOIN dwh.receiver_countries rid ON fact.receiver_id = rid.id
+JOIN dwh.countries sid ON fact.source_id = sid.id
+JOIN dwh.countries rid ON fact.receiver_id = rid.id
 
 WHERE rid.id NOT IN (217)
 AND sid.id NOT IN (217)

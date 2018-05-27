@@ -1,5 +1,5 @@
-TRUNCATE TABLE dwh.source_countries;
-INSERT INTO  dwh.source_countries  (
+TRUNCATE TABLE dwh.countries;
+INSERT INTO  dwh.countries  (
 Select
 
 id,name
@@ -8,8 +8,8 @@ FROM load.countries c
 Group By 1,2
 Order By 1,2);
 
-TRUNCATE TABLE dwh.receiver_countries;
-INSERT INTO  dwh.receiver_countries  (
+TRUNCATE TABLE dwh.countries;
+INSERT INTO  dwh.countries  (
 Select id,name
 FROM load.countries c
 
@@ -51,7 +51,7 @@ name,
 sum(CASE WHEN receiver_id NOT IN (217) THEN migration_numbers END)  outflows
 
 from dwh.migration fact
-JOIN dwh.source_countries sid ON fact.source_id = sid.id
+JOIN dwh.countries sid ON fact.source_id = sid.id
 WHERE sid.id NOT IN (217)
 Group By 1,2
 Order by 3 desc)sub1
@@ -62,7 +62,7 @@ name,
 sum(CASE WHEN source_id NOT IN (217) THEN migration_numbers END)  inflows
 
 from dwh.migration fact
-JOIN dwh.receiver_countries rid ON fact.receiver_id = rid.id
+JOIN dwh.countries rid ON fact.receiver_id = rid.id
 WHERE rid.id NOT IN (217)
 Group By 1,2)sub2 ON sub1.id = sub2.id);
 
