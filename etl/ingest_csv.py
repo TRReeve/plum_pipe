@@ -170,7 +170,7 @@ if __name__ == '__main__':
                                                                       time.clock() - start_time))
 
     else:
-        print("USER ERROR \n schema of target table and insert csv are not matching, create or alter columns as necessary")
+        print("INSERT FAILED: USER ERROR \n schema of target table and insert csv are not matching, create or alter columns as necessary")
         print("csv schema = {0}".format(csv_columns))
         print("table_schema = {0}".format(table_columns))
 
