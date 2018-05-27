@@ -13,7 +13,7 @@ echo "creating country primary key..."
 
 pipenv run python3 create_country_json.py --source bilateralmigrationmatrix20130.csv
 
-echo "JSON created..."
+echo "JSON and CSV created..."
 
 
 echo "mapping matrix files to create normalised csvs..."
