@@ -5,12 +5,9 @@ of insertions to avoid any chance of topping out memory) and maximise availabili
 
 There is an immutable layer of CSVs all built off of one source of truth in the country_json files. 
 which is fed into an incorruptible load layer (in theory) which would then be recalculated periodically in full so that user errors and shitty data inputs are 
-rectifiable. After this point the reporting layer of materalized views caches the data (until refreshed by a new batch generation) that then gives us the 
-direct answer to the business questions we want at any particular moment. 
-
-If the data was much larger we could also introduce more tables like the table net 
-movements that could theoretically be done as a materalized view as well, the role of this table  lends itself to some pre processing before we generate the 
-view (aka splitting the tables and rejoining on common country id. 
+rectifiable. After this point the reporting layer of materalized views caches the data tables (until refreshed by a new batch generation) that then gives us the 
+direct answer to the business questions we want at any particular moment. This could then be combined with a a stream layer that includes data generated between
+last report refresh and the current moment in time. 
 
 In a production environment this monolithic etl job would be split into its seperate components 
 with ETL loads happening far more rapidly and batch jobs being run in background without dropping the old table till the last possible moment to maximise 
