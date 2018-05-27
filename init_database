@@ -30,3 +30,5 @@ psql -d $DB < sql/create_batch_layer.sql
 echo "generating report views"
 
 psql -d $DB < sql/create_report_views.sql
+
+echo "run etl process with ./run_etl"
