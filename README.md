@@ -17,7 +17,8 @@ with ETL loads happening far more rapidly and batch jobs being run in background
 availability rather than the simplistic truncate and recalulate approach here.
 
 
-Assumes a unix system
+NOTE: Deployment Assumes a unix system with a postgres cluster available to the user through psql.
+
 --Folder Structure
 
 
