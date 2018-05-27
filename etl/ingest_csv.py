@@ -101,7 +101,6 @@ def process_csv(data_source,schema,target,table_columns):
 
         csvline = next(f)
         
-
         chunkholder = []
 
         for line in f:
@@ -124,7 +123,6 @@ def process_csv(data_source,schema,target,table_columns):
             result = insert_to_table(chunkholder, schema, target, table_columns)
             inserted = inserted + int(result)
             chunkholder.clear()
-
 
         return inserted
 
