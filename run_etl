@@ -35,3 +35,7 @@ psql -d $DB < sql/refresh_batch_layer.sql
 echo "---REFRESHING MATERIALIZED VIEWS---"
 
 psql -d $DB < sql/refresh_mviews.sql
+
+echo "--RUNNING REPORTS--"
+
+./get_reports
