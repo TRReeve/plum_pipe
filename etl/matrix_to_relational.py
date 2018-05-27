@@ -17,7 +17,8 @@ def get_country_ids():
 
 def get_column_heads(country_id_map,target_csv):
 
-    """returns column names of top row"""
+    """removes commas and new lines and lowers case etc 
+       and returns column names of top row"""
     # get x axis
     with open(target_csv, 'r') as f:
         column_headers = next(f)
