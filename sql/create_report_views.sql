@@ -20,10 +20,10 @@ name,
 sum(migration_numbers) as emigrants
 
 from dwh.migration fact
-JOIN dwh.source_countries sid ON fact.receiver_id = sid.id
+JOIN dwh.source_countries sid ON fact.source_id = sid.id
 WHERE sid.id NOT IN (217,216,217)
 Group By 1
-Order by 2 asc
+Order by 2 desc
 limit 10);
 
 DROP MATERIALIZED VIEW IF EXISTS dwh.v_top10_country_to_country_migration;
