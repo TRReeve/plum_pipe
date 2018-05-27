@@ -137,11 +137,12 @@ def insert_to_table(data_object,schema,table,table_columns):
 
 
     cur.execute(sql.SQL("INSERT INTO {0}.{1} ({2}) VALUES {3} "
-                        "ON CONFLICT ON CONSTRAINT {4} DO NOTHING").format(sql.Identifier(schema),
+                        "ON CONFLICT ON CONSTRAINT {4} DO NOTHING")
+                                                        .format(sql.Identifier(schema),
                                                                 sql.Identifier(table),
                                                                 sql.SQL(', ').join(map(sql.Identifier, table_columns)),
                                                                 sql.SQL(',').join(map(sql.Literal, data_object)),
-                                                                           sql.Identifier(primary_key)))
+                                                                sql.Identifier(primary_key)))
     result = tuple(cur.statusmessage.split(" "))
     conn.commit()
     conn.close()
