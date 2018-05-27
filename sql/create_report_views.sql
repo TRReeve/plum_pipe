@@ -3,7 +3,7 @@ CREATE MATERIALIZED VIEW dwh.v_top10_migration_destinations AS (
 
 Select
 name,
-sum(case when source_id = 217 THEN migration_numbers END) as immigrants
+sum(case when source_id != 217 THEN migration_numbers END) as immigrants
 
 from dwh.migration fact
 JOIN dwh.countries rid ON fact.receiver_id = rid.id
@@ -17,7 +17,7 @@ CREATE MATERIALIZED VIEW dwh.v_top10_migration_origins AS (
 
 Select
 name,
-sum(CASE WHEN receiver_id = 217 THEN migration_numbers END) as total_emigrants
+sum(CASE WHEN receiver_id != 217 THEN migration_numbers END) as total_emigrants
 from dwh.migration fact
 JOIN dwh.countries sid ON fact.source_id = sid.id
 WHERE sid.id NOT IN (217)
