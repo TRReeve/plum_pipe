@@ -26,25 +26,24 @@ def map_country_ids(target_csv):
     return countries_dict
 
 
-def dump_json_file(data):
+def dump_json_file(data,outfile):
 
-    with open('countries.json','w') as write:
+    """"....dumps a json file?..."""
+
+    with open(outfile + '.json','w') as write:
         json.dump(data,write)
 
-def dump_csv_file(data):
+def json_to_csv_dump(json_data,outfile,columns):
 
+    """converts JSON to csv file format with column headers defined
+      in arguments and written in first row"""
 
-    try:
-        with open(os.path.join(DATA_DIR,'countries.csv'), 'w') as f:
-            writer = csv.writer(f)
+    with open(os.path.join(DATA_DIR,outfile + '.csv'), 'w') as f:
+        writer = csv.writer(f)
 
-            writer.writerow(['id','name'])
-            for key, value in data.items():
-                writer.writerow([value, key])
-    except IOError:
-        print("I/O error", csv_file)
-    return
-
+        writer.writerow(columns)
+        for key, value in json_data.items():
+            writer.writerow([value, key])
 
 
 if __name__ == '__main__':
@@ -52,7 +51,11 @@ if __name__ == '__main__':
     # create parser object
     parser = argparse.ArgumentParser()
     parser.add_argument('--source',help='comma seperated data source')
+    parser.add_argument('--outfile',default='countries',help='default output name')
     args = parser.parse_args()
     countries_json = map_country_ids(os.path.join(DATA_DIR,args.source))
-    dump_json_file(countries_json)
-    dump_csv_file(countries_json)
+    dump_json_file(countries_json,args.outfile)
+
+    #columns to go into the json file
+    columns = ['id','name']
+    json_to_csv_dump(countries_json,args.outfile,columns)
