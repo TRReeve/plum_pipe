@@ -1,7 +1,7 @@
 # plum_pipe
 
-The main goal of this implementation is to roughly follow the principles of lambda architecture,be resilient to massive increases in dataloads (aka chunking
-of insertions to avoid any chance of topping out memory). 
+The main goal of this implementation is to roughly follow the principles of lambda architecture (sans Speed/Streaming Layer) ,be resilient to massive increases in dataloads (aka chunking
+of insertions to avoid any chance of topping out memory) and maximise availability and throughput while still providing useful calculations and aggregations
 
 There is an immutable layer of CSVs all built off of one source of truth in the country_json files. 
 which is fed into an incorruptible load layer (in theory) which would then be recalculated periodically in full so that user errors and shitty data inputs are 
