@@ -11,7 +11,9 @@ DB="plum_pipe"
 #If you get an error here run $service postgressql restart which will clear out 
 #existing sessions
 
-dropdb $DB
+echo "dropping $DB if exists"
+
+dropdb $DB -i
 
 echo "creating database $DB for owner $USER"
 createdb $DB

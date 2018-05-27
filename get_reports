@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "top10 country_to_country_migration"
+echo "top10 country to country migration"
 psql -d plum_pipe -c "Select * FROM dwh.v_top10_country_to_country_migration"
 
 
@@ -8,7 +8,7 @@ echo "top 10 country to country remittances"
 psql -d plum_pipe -c "Select * FROM dwh.v_top10_country_to_country_remittances"
 
 
-echo "top10_migration_destinations"
+echo "top10 migration destinations"
 psql -d plum_pipe -c "Select * FROM dwh.v_top10_migration_destinations"
 
 echo "top10 migration origins"
