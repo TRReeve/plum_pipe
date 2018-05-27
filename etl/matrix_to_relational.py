@@ -42,7 +42,7 @@ def parse_to_integer(object):
         object = 0
     return object
 
-def get_rows_info(country_id_map,column_heads,target_csv,x_axis,y_axis):
+def get_rows_info(country_id_map,column_heads,target_csv,x_axis,y_axis,fact_kpi):
     
     """creates start row of y axis, x axis and amount,
        for each row in the document inserts the id of the x axis (from standard 
@@ -52,7 +52,7 @@ def get_rows_info(country_id_map,column_heads,target_csv,x_axis,y_axis):
     with open(target_csv, 'r') as f:
 
         next(f)
-        rows_object = [[x_axis,y_axis, 'amount']]
+        rows_object = [[x_axis, y_axis,fact_kpi]]
 
         # get y axis dimensions
 
@@ -92,12 +92,13 @@ if __name__ == '__main__':
     parser.add_argument('--target_csv', help='target table')
     parser.add_argument('--x_axis_name', help='x axis name of matrix')
     parser.add_argument('--y_axis_name', help='y axis name of matrix')
+    parser.add_argument('--fact_name',help='name of kpi you\'re measuring')
     args = parser.parse_args()
     source_file = os.path.join(DATA_DIR, args.source)
     csv_file = os.path.join(DATA_DIR,args.target_csv)
 
     json_map = get_country_ids()
     column_heads = get_column_heads(json_map,source_file)
-    mapped_data = get_rows_info(json_map,column_heads,source_file,args.x_axis_name,args.y_axis_name)
+    mapped_data = get_rows_info(json_map,column_heads,source_file,args.x_axis_name,args.y_axis_name,args.fact_name)
     write_to_csv(mapped_data,csv_file)
     print("\n ---matrix mapped to csv located at {0}---\n".format(csv_file))

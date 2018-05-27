@@ -18,9 +18,9 @@ echo "JSON created..."
 
 echo "mapping matrix files to create normalised csvs..."
 
-pipenv run python3 matrix_to_relational.py --source bilateralmigrationmatrix20130.csv --target_csv $TIME'migration.csv' --x_axis_name 'source_id' --y_axis_name 'receiver_id'
+pipenv run python3 matrix_to_relational.py --source bilateralmigrationmatrix20130.csv --target_csv $TIME'migration.csv' --x_axis_name 'source_id' --y_axis_name 'receiver_id' --fact_name 'amount'
 
-pipenv run python3 matrix_to_relational.py --source bilateralremittancematrix2016_Nov2017.csv --target_csv $TIME'remittance.csv' --x_axis_name 'source_id' --y_axis_name 'receiver_id'
+pipenv run python3 matrix_to_relational.py --source bilateralremittancematrix2016_Nov2017.csv --target_csv $TIME'remittance.csv' --x_axis_name 'source_id' --y_axis_name 'receiver_id' --fact_name 'amount'
 
 echo "inserting csvs to table...."
 

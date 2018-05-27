@@ -1,5 +1,8 @@
 #!/bin/bash
 
+TIME=$(date +%Y%m%d'_')
+
+
 echo "renaming column in remittance table"
 echo "-----"
 psql -d plum_pipe -c "ALTER TABLE load.remittance RENAME COLUMN receiver_id TO idonttellpeoplewhenimchangingcoreinfrastructure"
@@ -10,7 +13,7 @@ echo "attempting to insert to column with same csv"
 echo "-----"
 echo "pythons response iiisss....."
 
-pipenv run python3 ingest_csv.py --source data/remittance.csv --target_schema load --target_table remittance
+pipenv run python3 ingest_csv.py --source data/$TIME'remittance.csv' --target_schema load --target_table remittance
 
 
 echo "------"
@@ -21,7 +24,8 @@ psql -d plum_pipe -c "ALTER TABLE load.remittance RENAME COLUMN idonttellpeoplew
 echo "changing back and trying again"
 echo "python response iiisss...."
 
-pipenv run python3 ingest_csv.py --source data/remittance.csv --target_schema load --target_table remittance
+pipenv run python3 ingest_csv.py --source data/$TIME'remittance.csv' --target_schema load --target_table remittance
+
 
 
 
