@@ -4,7 +4,10 @@ The main goal of this implementation is to roughly follow the principles of lamb
 of insertions to avoid any chance of topping out memory) and maximise availability and throughput while still providing useful calculations and aggregations
 
 There is an immutable layer of CSVs all built off of one source of truth in the country_json and CSV files. 
-which is fed into an incorruptible load layer (in theory) using a primary key to stop double insertions or weird stuff. This then acts as a staging area for the batch layer that is recalculated periodically using all available information in load. After this point the reporting layer of materalized views caches the data tables (until refreshed by a new batch generation) that then gives us the direct answer to the business questions we want at any particular moment. This could then also be combined with a a stream layer that includes queries data generated between last batch recalculation refresh and the current moment in time directly from the most recent logs. 
+which is fed into an incorruptible load layer (in theory) using a primary key to stop double insertions or weird stuff. This then acts as a staging area for the batch layer that is recalculated periodically using all available information in load. After this point the reporting layer of materalized views caches the data tables (until refreshed by a new batch generation) that then gives us the direct answer to the business questions we want at any particular moment. 
+
+
+In terms of extensions These reports could be stored on a server closer to where user requests are coming from to futher reduce latency. This could then also be combined with a a stream layer that includes queries data generated between last batch recalculation refresh and the current moment in time directly from the most recent logs giving us a hybrid view between the full data set and a calculation of a smaller subset of data. 
 
 In a production environment this monolithic etl job would be split into its seperate components 
 with ETL loads happening far more rapidly and batch jobs being run in background without dropping the old table till the last possible moment to maximise 
